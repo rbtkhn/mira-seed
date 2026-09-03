@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+
+# Build artifacts
+build/
+dist/
+
+# Editor and OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Optional read-only AI harness receipt
+/tmp/ai-harness/
+
+# ---------------------------------------------------------------------------
+# Load-bearing exclusions carried from Mira Core. This repository is public and
+# hydrates evidence bodies from the shared Archive catalog, which Mira Core
+# deliberately keeps out of Git. These two lines must land before any hydration
+# runs against this checkout, or the seed republishes what its parent withholds.
+# ---------------------------------------------------------------------------
+
+# Hydrated Mira Archive body mirrors (canonical bytes live outside Git)
+/archive/sources/geopolitics/sources/
+
+# Private continuity payloads are hydrated locally and never published by default.
+/mira/continuity/captures/
+
+# Hydrated Library text bodies, if a local working view is ever materialized.
+# Canonical texts live in the shared external store, not in this repository.
+/archive/library/texts/
+
+# Retired in-checkout private payload path; ignored only to prevent accidental
+# admission of legacy material. Live state belongs outside Git.
+/.mira-private/
+
+# Explicit local provenance stores; schemas and code remain versioned.
+/mira/provenance/*.sqlite3
+/mira/provenance/*.sqlite3-*
