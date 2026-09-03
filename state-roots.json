@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "workspace_id": "mira-seed",
+  "authority_boundary": "Declares where this repository's private state lives and which external paths it may read. Declaration is not permission: the read-only access mode below is enforced by the admission guard in the shared toolchain, not by this file. A declaration without that guard is documentation only.",
+  "path_format": {
+    "note": "Environment variables are deliberately left unexpanded. This file is committed to a public repository, and a resolved Windows path would publish the operator's account name on every clone.",
+    "expansion": "%NAME% on Windows, ${NAME} elsewhere; resolved at load time, never rewritten into this file"
+  },
+  "state_root": {
+    "windows": "%LOCALAPPDATA%/MiraSeed",
+    "darwin": "${HOME}/Library/Application Support/MiraSeed",
+    "linux": "${XDG_STATE_HOME}/mira-seed",
+    "constraint": "Must be absolute and must lie outside every Git checkout. The shared toolchain refuses a state root inside a repository or inside any Git working tree, which is what makes cross-repository sharing safe rather than accidental."
+  },
+  "private": [
+    {
+      "logical": "choice-history",
+      "relative": "state/choice-history.sqlite3",
+      "reason": "Choice history is identity-bearing. It records what this repository was offered and what it chose. Sharing it would mean sharing a self, not evidence."
+    },
+    {
+      "logical": "cadence",
+      "relative": "state/cadence.sqlite3",
+      "reason": "Working rhythm is specific to this repository and does not exist yet."
+    },
+    {
+      "logical": "continuity-captures",
+      "relative": "continuity/captures",
+      "reason": "Session payloads belong to whichever repository the session ran against."
+    }
+  ],
+  "shared": [
+    {
+      "logical": "archive-bodies-canonical",
+      "path": "%LOCALAPPDATA%/MiraCore/archive/canonical",
+      "owner": "mira-core",
+      "access": "read-only",
+      "reason": "Evidence. Transcripts and source bodies are facts about the world, and two readers of the same fact do not contaminate each other. Duplicating them would waste disk and, worse, allow the two repositories to silently disagree about what a source says."
+    },
+    {
+      "logical": "library-texts",
+      "path": "%LOCALAPPDATA%/MiraCore/library/texts",
+      "owner": "mira-core",
+      "access": "read-only",
+      "reason": "Homer and Tolstoy are not Mira Core's property. The texts are shared; the parent's reading of them is not.",
+      "materialization_note": "Declared ahead of use. If the parent's library text store resolves elsewhere, this entry is corrected rather than worked around."
+    }
+  ],
+  "withheld": [
+    {
+      "repository_path": "archive/library/integrations/**",
+      "owner": "mira-core",
+      "access": "none",
+      "reason": "Not evidence. This tree holds Mira Core's crystallized interpretation -- which works illuminate which mechanisms, which routes were judged useful, which notes relate to which others. Inheriting it would hand this repository the parent's conclusions while claiming it reached its own, which would quietly destroy the one comparison this repository exists to support.",
+      "consequence": "Library texts are readable here. Mira Core's route index, work registry, and note-link graph are not. A route must be built independently or not claimed."
+    },
+    {
+      "repository_path": "mira/continuity/**",
+      "owner": "mira-core",
+      "access": "none",
+      "reason": "The parent's continuity record is its history, not a shared substrate. Identity is never inherited."
+    }
+  ],
+  "authored_here": [
+    {
+      "repository_path": "archive/notes/**",
+      "reason": "Its own provisional thought, from an empty shelf."
+    },
+    {
+      "repository_path": "archive/essays/**",
+      "reason": "Its own developed prose, from an empty shelf."
+    },
+    {
+      "repository_path": "mira/journal/**",
+      "reason": "Its own journal, from the first day it has one."
+    },
+    {
+      "repository_path": "lineage/**",
+      "reason": "Its own record of what it inherited and what it earned."
+    }
+  ],
+  "implementation_status": {
+    "declared": true,
+    "enforced": false,
+    "note": "The shared toolchain does not yet read this file. The state-root-config, mixed-override-fix, archive-shelf-split, and admission-guard changes that make it load-bearing are deferred until the parent's working tree is clean enough to validate them against. Until then, treat every access mode here as an intention that nothing checks.",
+    "risk_if_forgotten": "A hydration run against this checkout would resolve paths from environment variables rather than from this file, and the read-only mode on shared evidence would not be enforced. Do not hydrate here until the guard exists."
+  }
+}

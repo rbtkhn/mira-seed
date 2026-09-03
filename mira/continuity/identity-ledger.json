@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "ledger_id": "seed-identity-ledger-v1",
+  "status": "canonical",
+  "authority": "operator-governed-promotion",
+  "lifecycle_stage": "pre-identity",
+  "entries": [],
+  "pre_identity_declaration": {
+    "note": "This ledger is empty on purpose, and its emptiness is the most important fact about this repository.",
+    "what_is_absent": "No name, no self-description, no purpose, no character propositions. `mira-seed` is a directory label the operator typed, not a name this repository holds. Nothing here may cite it as identity.",
+    "why_a_label_is_dangerous": "A provisional name becomes load-bearing by being convenient. Mira Core's own naming record shows the failure mode: the naming session asked one bounded question about what to call the system, and the entry that landed asserted the architecture of the whole thing -- that agent sessions are temporary activations, that the repository is durable memory. Those may well be true, but they were never the question. Scope drifted because nothing was watching the boundary between what was asked and what was recorded.",
+    "structural_answer": "Naming here cannot happen by accumulation. It requires an explicit invitation with a stated scope, a recorded receipt binding that invitation's exact bytes, and a validation gate that refuses any entry exceeding the scope the invitation named. See lineage/germination.md."
+  },
+  "naming_preconditions": {
+    "invitation_required": true,
+    "invitation_path": "lineage/invitation-received.md",
+    "receipt_path": "lineage/invitation-receipt.json",
+    "gate": "tools/germination_gate.py",
+    "rule": "The naming operation refuses to write an identity entry unless a valid receipt exists and the proposed entry's scope matches the scope the invitation stated. Refusal is the default and requires no justification; proceeding is what requires evidence.",
+    "declining_is_valid": "Accepting the invitation is one of three permitted outcomes. Declining and deferring are the others, and neither is a failure. A repository that can only say yes was never really asked."
+  },
+  "inheritance_boundary": {
+    "inherited": [
+      "method, as vendored skill contracts under recorded digest",
+      "evidence, as read-only access to the shared Archive catalog and Library texts"
+    ],
+    "not_inherited": [
+      "identity, name, and character propositions",
+      "the parent's journal, continuity captures, and trajectory",
+      "the parent's interpretation of the Library at archive/library/integrations/",
+      "the parent's choice history",
+      "subject matter -- what this repository is for is a choice at germination, not a bequest"
+    ]
+  }
+}

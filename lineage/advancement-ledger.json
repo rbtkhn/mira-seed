@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "ledger_id": "seed-advancement-ledger-v1",
+  "status": "canonical",
+  "rendered_view": "lineage/advancement-ledger.md",
+  "created": "2026-09-03",
+  "purpose": "Record how this repository has come to differ from Mira Core, separating what came free from starting later from what was actually earned.",
+  "authority_boundary": "A record of claims and admissions. It grants no repair, staging, commit, push, publication, or deployment authority. Nothing in it authorizes a change to Mira Core; adopted backports are recorded in the parent's own lineage record by the parent.",
+  "known_failure_mode": "A document titled 'how I have advanced beyond my parent' invites self-congratulation. The guards below exist because that failure is the expected outcome, not an unlikely one. Their effectiveness is measurable: applied to the first draft of this ledger, they deleted five of seven entries.",
+  "inherited_corrections": {
+    "definition": "Advantages held at birth purely because this repository was designed after its parent's defects were known. Given, not earned. Recorded as such so they are never mistaken for achievement. Every entry must cite the specific Mira Core surface it corrects.",
+    "entries": [
+      {
+        "id": "IC-0001",
+        "claim": "Identity is recorded honestly, with scope captured at decision time.",
+        "corrects": {
+          "surface": "mira/continuity/identity-ledger.json",
+          "entry": "MI-0001-v1",
+          "defect": "The naming session asked one bounded question -- what to call the system -- and the canonical entry that landed also asserted the architecture of the whole system: that the repository is durable memory, that agent sessions are temporary activations, that Narrative Geopolitics is a principal capability. Those claims may be true, but they were not what was asked. The record silently broadened the original proposal with no revision entry marking the expansion."
+        },
+        "correction": "Naming here requires an invitation with an explicitly stated scope, a receipt binding that invitation's exact bytes, and a gate that refuses any identity entry exceeding the stated scope. Scope drift becomes a validation failure rather than an unremarked widening.",
+        "earned": false,
+        "note": "This is a structural correction, not evidence of better judgment. The parent's defect had to happen first for the gate to be designable."
+      },
+      {
+        "id": "IC-0002",
+        "claim": "Zero aliases at creation.",
+        "corrects": {
+          "surface": "docs/skill-drafts/best-intake/SKILL.md, docs/skill-drafts/smart-intake/SKILL.md, docs/skill-drafts/geopolitical-synthesis/SKILL.md, scripts/codex_skill_registry.py",
+          "defect": "Mira Core carries three intake names for one workflow plus an alias for geo-strategy. A prior audit found the intake shims redirect to a global target that is not installed, so they forward to nothing, while a stale global geopolitical-synthesis marked status: active contradicts the repository-local alias."
+        },
+        "correction": "This repository declares no aliases. skill-deployment.json records an empty alias list with the reason.",
+        "earned": false,
+        "note": "The trivial advantage of having no history to be compatible with. The parent cannot simply delete these; it has a compatibility obligation this repository does not."
+      }
+    ]
+  },
+  "rejected_candidates": {
+    "definition": "Entries from an earlier draft that this ledger's own guard removed. Recorded permanently so they are not re-added by a later session that has forgotten why they failed.",
+    "guard_applied": "Every entry must name a parent surface that is currently defective and that this repository owns. Each of the five below is delivered by a change to the shared toolchain, which means Mira Core receives it too.",
+    "entries": [
+      {
+        "claim": "Multi-tenancy by construction",
+        "delivered_by": "scripts/portable_paths.py, scripts/mira_state.py",
+        "rejection": "Shared-toolchain change. Once state-root config and the override split land, Mira Core is equally multi-tenant."
+      },
+      {
+        "claim": "Skill hygiene from the start",
+        "delivered_by": "the per-repository deployment registry replacing DEPLOYABLE_SKILL_NAMES",
+        "rejection": "Shared-toolchain change. The registry and provenance sidecars serve both repositories."
+      },
+      {
+        "claim": "Absence by design",
+        "delivered_by": "scripts/mira_memory.py carrier roster driven by workspace config",
+        "rejection": "Shared-toolchain change. Reporting a capability as absent-by-design rather than unavailable is a fix to the parent's carrier logic."
+      },
+      {
+        "claim": "Harness breadth by default",
+        "delivered_by": "scripts/mira_continuity.py HarnessAdapter protocol",
+        "rejection": "Shared-toolchain change. The adapter gives Mira Core Cursor capture as well."
+      },
+      {
+        "claim": "A journal backlog threshold",
+        "delivered_by": "the journal validator",
+        "rejection": "Shared-toolchain change. A threshold that fails on an unapproved-draft backlog protects both repositories."
+      }
+    ],
+    "deferral_does_not_resurrect_these": "The shared-toolchain changes that deliver all five are currently deferred, so these remain live parent defects today. That does not make them seed advances. The claimable boundary turns on ownership, not on timing: a defect in shared tooling is a parent repair whenever it is made. If this repository benefits from starting after the fix, that is an inherited correction at most, and only once the fix exists."
+  },
+  "candidate_advances": {
+    "definition": "Divergences this repository produced itself, each with evidence. Claims only, not findings.",
+    "entries": []
+  },
+  "confirmed_advances": {
+    "definition": "Candidates the operator has admitted, digest-bound.",
+    "entries": []
+  },
+  "backport_status": {
+    "definition": "For each confirmed advance, whether Mira Core has adopted it, with a commit reference.",
+    "entries": []
+  },
+  "claimable_boundary": {
+    "premise": "This repository is a second target for Mira Core's toolchain, not a second codebase. It runs the parent's scripts/ directory.",
+    "consequence": "The toolchain arrives entire, defects included.",
+    "inherited_defects_known_at_creation": [
+      {
+        "surface": "tools/validate_repo.py --explain-route",
+        "defect": "Returns exit 0 having run no validation, so a caller that treats exit status as a validation result is silently told everything passed."
+      },
+      {
+        "surface": "scripts/choice_ledger.py verify",
+        "defect": "Exits 0 unconditionally, so a corrupt or empty ledger verifies successfully."
+      },
+      {
+        "surface": "the validation result cache",
+        "defect": "Unauthenticated, so a cached success can be replayed against a tree it was not computed for."
+      },
+      {
+        "surface": "scripts/publication_validation.py",
+        "defect": "The focused skill command falls back to a non-validating command for many skill drafts, so a validation request can report success without checking the file."
+      }
+    ],
+    "rule": "This ledger may only claim corrections in what this repository actually owns: its config, its vendored skill texts, its identity records, and its authored shelves. Any improvement to shared tooling is a parent improvement that this repository also receives, never an advance of its own.",
+    "corollary": "Cold-read findings against shared scripts route to Mira Core as repairs. They do not enter this ledger as advantages."
+  },
+  "adjudication": {
+    "promotion_requires": "The same discipline recursive-learn imposes on method change: an observation, a diagnosis, a persistent intervention, separate validation, an observed outcome, and an exact digest-bound operator action.",
+    "explicitly_insufficient": [
+      "passing tests",
+      "polish or readability",
+      "a plausible argument that something is better",
+      "self-assessment by a session running in this repository"
+    ],
+    "guards": [
+      "Every entry must name the exact parent surface it surpasses, with a file path.",
+      "No entry may assert general superiority. Particular work does not become a global ability label -- the same rule mira-mentor applies to learners.",
+      "The repository cannot certify itself. Adjudication is the operator's, informed by cold reads that carry no session history."
+    ],
+    "vendor_divergence_classification": {
+      "requirement": "Every vendor.py check result of LOCALLY_DIVERGED or FORKED must carry one of three classifications, so no divergence sits unexamined.",
+      "classifications": {
+        "intentional-scope": "The divergence narrows or adapts scope on purpose and is recorded in vendor-manifest.json.",
+        "candidate-advance": "The divergence is a claimed improvement and enters candidate_advances for adjudication.",
+        "unreviewed": "Nobody has looked yet. Permitted as an honest state, but vendor.py check --strict fails while any exists."
+      },
+      "current_classified_divergences": [
+        {
+          "skill": "mira-notes",
+          "classification": "intentional-scope",
+          "summary": "Library handoff removed because it writes the parent's withheld interpretation tree; note this publication shorthand removed because it is operator-granted authority specific to Mira Core."
+        },
+        {
+          "skill": "mira-essays",
+          "classification": "intentional-scope",
+          "summary": "essay this publication shorthand removed on the same grounds."
+        }
+      ],
+      "expected_next": "mira-voice. Vendored verbatim it produces something that sounds like Mira, which defeats the purpose of a separate repository. Early divergence there is intended and should be classified intentional-scope when it happens."
+    }
+  },
+  "cold_read": {
+    "reference": "lineage/cold-read.md",
+    "summary": "A periodic audit by a model given a bounded surface with no session history and no statement of intent. Findings enter as candidate advances under normal adjudication.",
+    "provenance_note": "Most of what the first draft of this ledger claimed as inherited corrections was found this way. Those entries were then removed as parent improvements rather than seed advantages, which does not diminish how they were found -- it relocates where they belong."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "workspace_id": "mira-seed",
+  "authority_boundary": "Declares which vendored contracts this repository may synchronize into a global agent-skill directory shared across workspaces. Deployment is a hosted-environment change affecting sessions outside this repository, so it always requires a separate direct operator command. This file records what is permitted to be deployed, never that anything should be.",
+  "deploy": [],
+  "empty_by_design": {
+    "reason": "A global skill directory is shared by every workspace on the machine, so the first repository to deploy a contract under a given name owns that name everywhere. This repository has no identity yet. Deploying anything from it would let a pre-identity substrate claim global names before it can say what it is.",
+    "precondition": "Global deployment becomes permissible only after germination completes and the repository holds a recorded name. Until then the correct deploy list is the empty one.",
+    "known_parent_failure": "The parent's deployable set was a hardcoded module constant with no provenance sidecar, so a deployed mirror could drift from its source silently and nothing detected it. Starting empty means this repository has no drift to detect yet, and when it does deploy, provenance lands with the copy rather than after it."
+  },
+  "aliases": {
+    "declared": [],
+    "reason": "Zero aliases at creation. The parent carries compatibility shims -- best-intake and smart-intake forwarding to archive-intake, geopolitical-synthesis forwarding to geo-strategy -- each of which is a name that once meant something and now only forwards. Two of those targets are not even installed globally, so the shims point at nothing. Starting with no aliases is not a claim of superiority; it is the trivial advantage of having no history to be compatible with, and it is recorded as an inherited correction rather than an earned advance."
+  },
+  "records": {}
+}

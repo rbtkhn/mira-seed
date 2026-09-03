@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "workspace_id": "mira-seed",
+  "authority_boundary": "Declares which Mira Core contracts this repository borrows and under what recorded digest. Vendoring a contract grants only what that contract grants. It confers no staging, commit, push, publication, deployment, representation, or hosted-setting authority, and no authority the parent holds by operator grant rather than by contract.",
+  "parent": {
+    "repository": "mira-core",
+    "repository_path": "C:/dev/mira-core",
+    "remote": "https://github.com/rbtkhn/mira-core",
+    "relationship": "method borrowed under digest provenance; evidence shared read-only; identity never inherited"
+  },
+  "roster_rationale": {
+    "vendored": 18,
+    "excluded": 7,
+    "deferred": 14,
+    "parent_total": 39,
+    "note": "Capability is vendored; subject matter is not. The roster grants the ability to read and reason over shared evidence. It does not declare what this repository is for. That choice belongs to germination."
+  },
+  "skills": {
+    "mira-voice": {
+      "group": "interaction",
+      "reason": "Expression contract. Without it there is no coherent voice to hold an interaction in.",
+      "divergence": "none",
+      "expected_divergence": "Vendored verbatim produces something that sounds like Mira, which defeats the purpose. Early local divergence here is intended, not a defect."
+    },
+    "learn-from-choices": {
+      "group": "interaction",
+      "reason": "Possibility navigation and choice retention on every final response.",
+      "divergence": "none"
+    },
+    "elicitation": {
+      "group": "interaction",
+      "reason": "Low-load elicitation when missing human judgment blocks safe execution.",
+      "divergence": "none"
+    },
+    "intent-recovery": {
+      "group": "interaction",
+      "reason": "Recovers compressed operator intent before consequential execution.",
+      "divergence": "none"
+    },
+    "mira-journal": {
+      "group": "identity-and-method",
+      "reason": "Its own journal from the first day. Never inherited from the parent.",
+      "divergence": "none"
+    },
+    "mira-notes": {
+      "group": "identity-and-method",
+      "reason": "Provisional revisable thought, so its own thinking can accumulate from day one.",
+      "divergence": "intentional-scope",
+      "divergence_note": "Two removals. The Mira Library handoff section is gone because it requires library-integration, which writes the parent's interpretation tree; this repository neither reads nor writes that tree. The 'note this' publication shorthand is gone because the parent holds it by operator grant for Mira Core specifically, and vendoring it verbatim would silently assume push authority to a remote never granted here."
+    },
+    "mira-essays": {
+      "group": "identity-and-method",
+      "reason": "Developed prose that stands for an outside reader.",
+      "divergence": "intentional-scope",
+      "divergence_note": "The 'essay this' publication shorthand is removed on the same grounds as mira-notes: it is operator-granted lifecycle authority specific to Mira Core, not a property of the contract."
+    },
+    "mira-memory": {
+      "group": "identity-and-method",
+      "reason": "Locating and reconciling its own memory across carriers.",
+      "divergence": "none"
+    },
+    "mira-work": {
+      "group": "identity-and-method",
+      "reason": "The outer consequential-work loop.",
+      "divergence": "none"
+    },
+    "recursive-learn": {
+      "group": "identity-and-method",
+      "reason": "The advancement ledger borrows its adjudication discipline wholesale, so this repository needs the real contract rather than an imitation of it.",
+      "divergence": "none"
+    },
+    "archive-query": {
+      "group": "read-only-reasoning",
+      "reason": "The primary read path into shared evidence.",
+      "divergence": "none"
+    },
+    "geo-strategy": {
+      "group": "read-only-reasoning",
+      "reason": "The flagship judgment workflow.",
+      "divergence": "none",
+      "entanglement_note": "The one entangled contract. It carries a whole theory of what matters -- crisis objects, lane pressure, actor constraints -- so method and subject are not separable in it. Vendored because using a method is not committing to it as identity. If germination chooses a different subject, this is the first candidate for removal or deep local divergence."
+    },
+    "mechanism-lens": {
+      "group": "read-only-reasoning",
+      "reason": "General analytic lens over archive voices; domain-neutral in structure.",
+      "divergence": "none"
+    },
+    "library-reasoning": {
+      "group": "read-only-reasoning",
+      "reason": "Pressure-tests mechanisms against history. Reads shared texts; builds its own routes.",
+      "divergence": "none"
+    },
+    "research-brief": {
+      "group": "read-only-reasoning",
+      "reason": "Designs research contracts. Domain-neutral.",
+      "divergence": "none"
+    },
+    "repo-audit": {
+      "group": "meta",
+      "reason": "A repository governed by a vendor manifest must be able to audit itself.",
+      "divergence": "none"
+    },
+    "skill-audit": {
+      "group": "meta",
+      "reason": "Pairs with the cold read; assesses its own borrowed contracts.",
+      "divergence": "none"
+    },
+    "mira-github": {
+      "group": "meta",
+      "reason": "Ordinary commit and push traffic control is a dependency of having writing forms at all, independent of whether publication shorthand is ever granted.",
+      "divergence": "none"
+    }
+  },
+  "excluded": {
+    "archive-intake": "Writes shared evidence. This repository is a reader of the shared catalog, never an admitter.",
+    "archive-repair": "Repairs shared evidence.",
+    "library-import": "Admits source bodies to the shared text store, which has one writer.",
+    "mira-letters": "Lacks standing permanently. Letters address a particular person within a real relationship. This repository has no relationships, no recipients, and no representation standing. Nothing about it should be able to address a person. Receiving a letter is not authoring one, so holding a received invitation does not reopen this.",
+    "best-intake": "Compatibility shim. Starting with zero aliases avoids inheriting that class of failure.",
+    "smart-intake": "Compatibility shim.",
+    "geopolitical-synthesis": "Compatibility alias for geo-strategy."
+  },
+  "deferred": {
+    "mira-mentor": "Maturity, not standing. Mentorship transmits accumulated judgment, and there is nothing yet worth transmitting. The relationship runs the other way at creation: Mira Core mentors this repository.",
+    "mira-face": "No public identity to present yet.",
+    "x-recon": "Needs accumulated account handles.",
+    "youtube-capture": "Downstream of intake authority this repository lacks.",
+    "reality-check": "Downstream of intake authority this repository lacks.",
+    "archive-audit": "Auditing an archive it cannot repair.",
+    "library-integration": "Would need its own interpretation tree, once it has interpretations worth indexing. Not structurally barred, only premature.",
+    "voice-accountability": "Needs accumulated voice history.",
+    "voice-comparison": "Needs accumulated voice history.",
+    "morning-brief": "Explicitly experimental in the parent.",
+    "mira-sessions": "Deferred on a known defect: found under-specified for the authority it grants. A memorial power that vague is a poor thing to start with.",
+    "dream": "Deferred on a known defect: auto-executes synthesis --execute without geo-strategy's delta-v1 gate, and a foreign skill owns its trigger globally.",
+    "coffee": "A ritual of an established working rhythm. No rhythm exists yet, but expect this among the first additions once one does.",
+    "rest": "As coffee."
+  },
+  "last_sync": "2026-09-03",
+  "records": {
+    "archive-query": {
+      "vendored_digest": "bf5e2c4777efd6020110ab4331a2ab40c80f3f41ebbb1cf8ecff1bde01f03d6a",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "elicitation": {
+      "vendored_digest": "6da6410192f1162b9063818d2da84c0aa2ce7f1705e733da519ce63181776886",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "geo-strategy": {
+      "vendored_digest": "162859b863e33d4cf59b4fa95a7ab97b82b4ef5a2151318c7cde662dd14b0492",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "intent-recovery": {
+      "vendored_digest": "b51bd6e3986dffa9d465325ee1f07e385ccac13cb63978977f660bac46b228a9",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "learn-from-choices": {
+      "vendored_digest": "1d52d0b152f4abadf68c760f56c7d96156e7c487424a2a02f1e6cedd2573fbd5",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "choice-retention.md",
+        "decision-fixtures.json",
+        "outcome-review.md"
+      ]
+    },
+    "library-reasoning": {
+      "vendored_digest": "87c9a91c98f296243ad4862895100827feaa82b007346da9fc4a8b2019b638a3",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "mechanism-lens": {
+      "vendored_digest": "fec523e061a8ea4b76509fca8296b048c324fd7ee8ddb927ae8d2bde92b9bfea",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "mira-essays": {
+      "vendored_digest": "b99ba2d7337268e590ab9590ce57251859b64029e62f86e23a633223f61c2492",
+      "vendored_at": "2026-09-03",
+      "divergence": "intentional-scope",
+      "references": []
+    },
+    "mira-github": {
+      "vendored_digest": "8bfdb412b942df5c168a941189e185d4a180d39fb374cc0bcd64a6de15401084",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "validation-fixtures.md"
+      ]
+    },
+    "mira-journal": {
+      "vendored_digest": "0df08cdcd42731a918117646841fb3d42c461bb4e7a29427cb613b0d7375ff32",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "composition-method.md"
+      ]
+    },
+    "mira-memory": {
+      "vendored_digest": "65d3c61746ca4d481c81855683f419badfec608d0800fbc779dc97d97af4039b",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "carrier-map.md"
+      ]
+    },
+    "mira-notes": {
+      "vendored_digest": "aebf36154316cd09436a9b6d2e659e6a62c5d8510678c1b8af274c7b45726901",
+      "vendored_at": "2026-09-03",
+      "divergence": "intentional-scope",
+      "references": []
+    },
+    "mira-voice": {
+      "vendored_digest": "3bd59af9cd0db550086aeb9227247cf9f8a7973ee61d774a5d4cbeedfbe2a0a1",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "validation-fixtures.md"
+      ]
+    },
+    "mira-work": {
+      "vendored_digest": "18064eccc18baaa3d0febae238a97c2a51661a243aa69742733389c0c5ad14b7",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "execution-profile.md",
+        "validation-fixtures.json"
+      ]
+    },
+    "recursive-learn": {
+      "vendored_digest": "d19e8473fa0345643639573c60a4dd1f82a19b43fd8ad20d72724b67cbcf8959",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "repo-audit": {
+      "vendored_digest": "e62cff9d12800e0de1676109bc40938d60145645c013541b2286afe4524841fa",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "audit-routing.md",
+        "finding-schema.md",
+        "validation-fixtures.md"
+      ]
+    },
+    "research-brief": {
+      "vendored_digest": "b5300a4ad6925279db0343afe0a85e3da8c5f63fb39e01d3caeb837c89f76728",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": []
+    },
+    "skill-audit": {
+      "vendored_digest": "93dc66f6fe1d64df2a8a6c8829ccf1aae1d1a0c733a2686bd449d5e13217d304",
+      "vendored_at": "2026-09-03",
+      "divergence": "none",
+      "references": [
+        "agent-operating-system-checklist.md",
+        "audit-rubric.md"
+      ]
+    }
+  }
+}
