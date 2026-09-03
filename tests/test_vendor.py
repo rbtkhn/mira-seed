@@ -226,6 +226,50 @@ def test_classified_divergence_passes_strict(workspace, capsys):
     assert code == 0, "classified divergence is permitted"
 
 
+def test_parent_override_by_flag_and_environment(workspace, capsys, monkeypatch):
+    """The manifest path is correct on one machine and useless on every other.
+
+    This repository is public, so the ordinary case is a reader whose parent
+    checkout is somewhere else entirely. If the only documented command dies on
+    a stranger's absolute path, the tool is decorative to everyone but its
+    author.
+    """
+    tmp_path, parent, seed = workspace
+    module = load_vendor(tmp_path)
+    monkeypatch.delenv(module.PARENT_ENV, raising=False)
+    run(module, "sync")
+    capsys.readouterr()
+
+    manifest_path = seed / "vendor-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["parent"]["repository_path"] = "/a/path/only/the/author/has"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+    with pytest.raises(SystemExit) as unusable:
+        run(module, "check")
+    assert module.PARENT_ENV in str(unusable.value), "the error must name the way out"
+
+    code, report = read_report(module, capsys, "check", "--parent", str(parent))
+    assert code == 0
+    assert report["results"]["sample-skill"]["state"] == "UNCHANGED"
+
+    monkeypatch.setenv(module.PARENT_ENV, str(parent))
+    code, report = read_report(module, capsys, "check")
+    assert code == 0
+    assert report["results"]["sample-skill"]["state"] == "UNCHANGED"
+
+
+def test_parent_flag_outranks_the_environment(workspace, capsys, monkeypatch):
+    tmp_path, parent, _ = workspace
+    module = load_vendor(tmp_path)
+    monkeypatch.setenv(module.PARENT_ENV, "/an/environment/value/that/is/wrong")
+    run(module, "sync", "--parent", str(parent))
+    capsys.readouterr()
+
+    code, _ = read_report(module, capsys, "check", "--parent", str(parent))
+    assert code == 0
+
+
 @pytest.mark.parametrize(
     "states, expected",
     [

@@ -31,8 +31,17 @@ world, and two readers of the same fact do not contaminate each other. Access is
 read-only: one repository writes shared evidence, and it is not this one.
 
 **Borrowed.** Method, as eighteen skill contracts vendored under the sha256 of
-the exact upstream bytes they came from. `python tools/vendor.py check --strict`
-reports drift and fails on any divergence nobody has classified.
+the exact upstream bytes they came from. Four of the eighteen have diverged
+deliberately and are classified as such. To check drift yourself, point the tool
+at your own clone of the parent:
+
+```bash
+git clone https://github.com/rbtkhn/mira-core ../mira-core
+python tools/vendor.py check --strict --parent ../mira-core
+```
+
+Drift cannot be computed from this repository alone. The digests record what was
+borrowed; the comparison needs the upstream bytes.
 
 **Withheld.** `archive/library/integrations/` — Mira Core's crystallized reading
 of the Library. Not evidence. Inheriting it would hand this repository the
@@ -68,11 +77,25 @@ and it says so.
 **Do not hydrate evidence here yet.** The `.gitignore` exclusions landed in the
 first commit, but the access-mode enforcement does not exist.
 
+### If you have cloned this
+
+You can read every contract, boundary and piece of reasoning here, and you can
+run the test suite and the drift check against your own clone of the parent.
+That is the whole of what is portable, and it is deliberately the interesting
+part: the argument, not the apparatus.
+
+You cannot reproduce the comparison. The shared evidence — Archive transcripts
+and Library texts — lives in a private state root outside both repositories and
+is not published. `state-roots.json` declares where it would be found on the
+machine that has it. Nothing here is a working system you can point at your own
+sources yet.
+
 ## Layout
 
 | Path | What it holds |
 | --- | --- |
 | `AGENTS.md` | Controlling instructions for any session run here |
+| `mira/continuity/identity-ledger.json` | The empty ledger this repository is organized around |
 | `vendor-manifest.json` | The 18 borrowed contracts, with digests and rationale |
 | `state-roots.json` | Declared private, shared, withheld, and authored paths |
 | `skill-deployment.json` | Empty by design until germination completes |
@@ -80,3 +103,4 @@ first commit, but the access-mode enforcement does not exist.
 | `lineage/` | Parent relationship: germination, advancement, cold read |
 | `archive/notes/`, `archive/essays/` | Empty authored shelves |
 | `tools/` | `vendor.py`, `germination_gate.py` |
+| `tests/` | 26 tests over the germination gate and drift detection |

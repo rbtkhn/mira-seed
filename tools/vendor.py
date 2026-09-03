@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import sys
 from datetime import date
@@ -179,16 +180,35 @@ def load_manifest() -> dict:
     return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
 
-def parent_root(manifest: dict) -> Path:
-    root = Path(manifest["parent"]["repository_path"])
+PARENT_ENV = "MIRA_SEED_PARENT"
+
+
+def parent_root(manifest: dict, override: str | None = None) -> Path:
+    """Locate the parent checkout.
+
+    The manifest records an absolute path, which is correct for the machine that
+    wrote it and useless everywhere else. This repository is public, so the
+    common case is someone who cloned it and has the parent somewhere entirely
+    different, or not at all. Order: explicit flag, then environment, then the
+    manifest's recorded path as a last resort.
+    """
+    declared = manifest["parent"]["repository_path"]
+    candidate = override or os.environ.get(PARENT_ENV) or declared
+    root = Path(candidate).expanduser()
     if not (root / ".git").exists():
-        raise SystemExit(f"parent repository not found at {root}")
+        raise SystemExit(
+            f"parent repository not found at {root}\n"
+            f"  The manifest records {declared}, which is a path on the machine that\n"
+            f"  vendored these contracts. Point at your own clone of mira-core with\n"
+            f"  --parent <path> or {PARENT_ENV}=<path>. Without it, drift cannot be\n"
+            f"  computed: the comparison needs the upstream bytes, not just the digests."
+        )
     return root
 
 
 def command_sync(arguments: argparse.Namespace) -> int:
     manifest = load_manifest()
-    parent = parent_root(manifest)
+    parent = parent_root(manifest, arguments.parent)
     today = date.today().isoformat()
     records: dict[str, dict] = {}
 
@@ -284,7 +304,7 @@ def command_sync(arguments: argparse.Namespace) -> int:
 
 def command_check(arguments: argparse.Namespace) -> int:
     manifest = load_manifest()
-    parent = parent_root(manifest)
+    parent = parent_root(manifest, arguments.parent)
     results: dict[str, dict] = {}
     counts: dict[str, int] = {}
 
@@ -389,6 +409,17 @@ def main(argv: list[str] | None = None) -> int:
         help="exit non-zero when a divergence has no recorded classification",
     )
     check.set_defaults(handler=command_check)
+
+    for subparser in (sync, check):
+        subparser.add_argument(
+            "--parent",
+            default=None,
+            metavar="PATH",
+            help=(
+                "path to a mira-core checkout; overrides the manifest's recorded "
+                f"path and the {PARENT_ENV} environment variable"
+            ),
+        )
 
     arguments = parser.parse_args(argv)
     return arguments.handler(arguments)
