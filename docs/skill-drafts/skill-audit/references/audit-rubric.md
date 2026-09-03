@@ -19,8 +19,10 @@ evidence-bound.
 - `name` is lowercase hyphen-case and matches the folder.
 - `description` includes what the skill does and specific trigger contexts.
 - `description` distinguishes near-neighbor workflows when confusion is likely.
-- Frontmatter avoids body-only trigger details that Codex cannot see before
-  activation.
+- Frontmatter avoids body-only trigger details the agent cannot see before
+  activation. This holds in every harness examined: each surfaces the
+  description alone until a skill is read, so a trigger stated only in the body
+  cannot cause activation.
 
 ## Authority Checklist
 

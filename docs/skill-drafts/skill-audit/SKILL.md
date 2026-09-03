@@ -1,11 +1,12 @@
 ---
 name: skill-audit
-description: "Audit repository-local Codex skills for trigger clarity, workflow completeness, authority boundaries, progressive disclosure, testability, drift risk, benchmark cases, and revision readiness. Use when the operator asks to audit, review, benchmark, harden, validate, compare, or improve a skill, or asks whether a skill is working well."
+description: "Audit repository-local agent skills for trigger clarity, workflow completeness, authority boundaries, progressive disclosure, testability, drift risk, benchmark cases, and revision readiness. Use when the operator asks to audit, review, benchmark, harden, validate, compare, or improve a skill, or asks whether a skill is working well."
 vendored_from: docs/skill-drafts/skill-audit/SKILL.md
 vendored_from_repo: mira-core
 vendored_digest: 93dc66f6fe1d64df2a8a6c8829ccf1aae1d1a0c733a2686bd449d5e13217d304
 vendored_at: 2026-09-03
-vendor_divergence: none
+vendor_divergence: intentional-scope
+vendor_divergence_note: "Harness neutrality, wording only. See vendor-manifest.json."
 ---
 
 # Skill Audit

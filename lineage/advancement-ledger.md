@@ -121,7 +121,48 @@ has classified is not, and `--strict` fails while any remains `unreviewed`.
 | --- | --- | --- |
 | `mira-notes` | LOCALLY_DIVERGED | intentional-scope |
 | `mira-essays` | LOCALLY_DIVERGED | intentional-scope |
-| the other 16 | UNCHANGED | — |
+| `mira-github` | LOCALLY_DIVERGED | intentional-scope |
+| `skill-audit` | LOCALLY_DIVERGED | intentional-scope |
+| the other 14 | UNCHANGED | — |
 
 Expect `mira-voice` next. Vendored verbatim it produces something that sounds
 like Mira, which defeats the purpose of a separate repository.
+
+`mira-github` and `skill-audit` diverged for harness neutrality. Both arrived
+naming Codex as an assumption rather than an observation, which is accurate for
+a parent that runs in one harness and false here. `mira-github` carried the
+behavioral part: a `codex/` branch namespace used to *detect* publication
+branches as well as create them, and a credential diagnosis that matched a
+literal sandbox account name. Neither is an advance — the upstream text is
+correct for Mira Core, and adapting a correct contract to a different
+circumstance earns nothing. The parent records the coupling as `LIN-0005`.
+
+### Two defects in this mechanism, both fixed
+
+Found by using the tool during the harness-neutrality pass, not by auditing it.
+Both were in the machinery that reports honesty rather than in any contract.
+This is local tooling rather than inherited, so fixing it earns no credit.
+
+**`VND-0001` — `check` compared only `SKILL.md`.** References were copied by
+`sync` and listed by name, never digested, never compared, so reference drift
+was invisible and `--strict` could not catch it. Contracts whose operative
+detail lives in a reference — `mira-github` and `repo-audit` among them — could
+diverge substantively while reporting clean. `sync` now digests each reference
+and `check` folds the results into the skill's state. Two states were added:
+`UPSTREAM_ADDED` for a parent reference never vendored, and `UNVERIFIED` for a
+reference with no baseline. `--strict` rejects both, because an absent baseline
+must never read as agreement.
+
+**`VND-0002` — `sync` erased the baseline it was meant to keep.** Skipping the
+file write for a declared-divergent skill replaced its record with a stub
+carrying the *current* parent digest. After one routine refresh, `check` would
+compare the parent against itself and call the diverged skill `UNCHANGED` — a
+deliberate divergence vanishing from the ledger's view with nothing saying so.
+This was worse than `VND-0001` and entirely silent. Found by reading
+`command_sync` before running it; running it first would have erased all four
+classified divergences.
+
+Neither would have surfaced by reading the four-state model, which is coherent
+and states its intent plainly. They surfaced from using the tool and then
+reading the path not taken — an argument for pointing the cold read at local
+tooling and not only at borrowed contracts.

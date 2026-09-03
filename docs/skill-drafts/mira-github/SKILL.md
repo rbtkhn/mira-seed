@@ -1,11 +1,12 @@
 ---
 name: mira-github
-description: "Repository-local publication traffic control for GitHub-facing work in Mira Core. Use when the operator says push, commit, PR, GitHub operations, repo hygiene with staging/commit/push/branch/remote scope, or compressed follow-ups such as you choose or make it so when they could cross staging, commit, branch publication, PR, or main synchronization boundaries. Choose lane, scope, branch, validation, and authority boundaries before any GitHub-facing mutation."
+description: "Repository-local publication traffic control for GitHub-facing work in this repository. Use when the operator says push, commit, PR, GitHub operations, repo hygiene with staging/commit/push/branch/remote scope, or compressed follow-ups such as you choose or make it so when they could cross staging, commit, branch publication, PR, or main synchronization boundaries. Choose lane, scope, branch, validation, and authority boundaries before any GitHub-facing mutation."
 vendored_from: docs/skill-drafts/mira-github/SKILL.md
 vendored_from_repo: mira-core
 vendored_digest: 8bfdb412b942df5c168a941189e185d4a180d39fb374cc0bcd64a6de15401084
 vendored_at: 2026-09-03
-vendor_divergence: none
+vendor_divergence: intentional-scope
+vendor_divergence_note: "Harness neutrality: agent/ branch namespace, whoami-based credential-split diagnosis, neutral examples, and scope corrected from Mira Core to this repository. See vendor-manifest.json."
 ---
 
 # Mira GitHub
@@ -69,7 +70,7 @@ freshness check.
 Side worktrees are publication state, not invisible implementation detail. At
 every fresh publication boundary, inspect `git worktree list` and surface any
 active worktree other than the current one when it is on `main`, tracks
-`origin/main`, points at a `codex/...` publication branch, or could plausibly
+`origin/main`, points at an `agent/...` publication branch, or could plausibly
 land on the same target branch during the current task.
 
 Treat hidden side-worktree use as a process failure, even when the Git result is
@@ -155,7 +156,7 @@ creating a new commit, staging broad changes, or reporting the repo as ready:
 
 Default recommendation: avoid new commits directly on `main` while any active
 side worktree exists that may publish to `origin/main`. Prefer a fresh
-`codex/...` branch or worktree, then refresh `main` immediately after the
+`agent/...` branch or worktree, then refresh `main` immediately after the
 remote branch lands.
 
 ### Routine readiness scan
@@ -259,7 +260,7 @@ Classify the next safe lane before staging or publishing:
 - `inspect-only`: read-only diagnosis, audit, or planning.
 - `commit-only`: create or prepare a local commit; no remote action is in
   scope.
-- `branch-push`: publish an exact bounded commit to `codex/...`.
+- `branch-push`: publish an exact bounded commit to `agent/...`.
 - `PR-ready`: branch exists or can be pushed and the next external step is PR
   preparation.
 - `main-sync-plan`: `main` is ahead, behind, diverged, or dirty enough that
@@ -271,16 +272,24 @@ Classify the next safe lane before staging or publishing:
 Default to branch publication over direct `main` publication. Use:
 
 ```text
-codex/<domain>-<object>-<action>-YYYYMMDD
+agent/<domain>-<object>-<action>-YYYYMMDD
 ```
 
 Examples:
 
 ```text
-codex/forecast-lebanon-hormuz-review-20260815
-codex/mira-github-skill-20260815
-codex/archive-aug14-intake-cleanup-20260815
+agent/vendor-manifest-divergence-review-20260903
+agent/mira-github-skill-20260903
+agent/germination-gate-scope-check-20260903
 ```
+
+The prefix marks a branch as agent-created rather than operator-created. It
+names no harness. Upstream this namespace is `codex/`, which was accurate for a
+repository that has only ever run in one harness and is a false claim in one
+that runs in two. Harness provenance belongs in the commit trailer or the
+validated-push receipt, where it can be recorded per commit; a branch name
+cannot carry it honestly when a single branch may receive commits from more
+than one session type.
 
 ## Triage dirty work before staging
 
@@ -501,7 +510,7 @@ when the validated-push receipt and `ls-remote` agree on the exact target SHA.
 ## Handle credential-context splits
 
 Sometimes the operator repairs GitHub auth in an interactive shell while the
-current Codex process still sees a stale or invalid token. Treat operator
+current agent process still sees a stale or invalid token. Treat operator
 terminal output as factual evidence about that shell, not proof that this
 process can push.
 
@@ -511,11 +520,15 @@ invalid auth, treat it as a credential-context split. Do not ask the operator
 to repeat a completed login until this ladder has been tried or a named step
 fails closed:
 
-On Windows, explicitly check for the Codex sandbox identity split before
-diagnosing ordinary token expiry. Normal task commands may run as
-`<host>\CodexSandboxOnline` while approved commands run as the real interactive
+On Windows, explicitly check for a sandbox identity split before diagnosing
+ordinary token expiry. Sandboxed agent harnesses may run normal task commands
+under a synthetic account while approved commands run as the real interactive
 Windows user, even when `USERPROFILE` and `APPDATA` point at that user's
-profile. In that state, GitHub CLI may read `hosts.yml` account metadata while
+profile. Determine the split by comparing `whoami` between a normal and an
+approved command rather than by matching a known account name — the synthetic
+account differs by harness, and `<host>\CodexSandboxOnline` is one observed
+example rather than the thing to look for. In that state, GitHub CLI may read
+`hosts.yml` account metadata while
 failing to read the keyring-backed token, and Git Credential Manager may report
 `SEC_E_NO_CREDENTIALS` or credential storage failure. Treat this as a sandbox
 credential-boundary issue. Prefer the elevated exact-refspec verification and

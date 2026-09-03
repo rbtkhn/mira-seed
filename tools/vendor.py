@@ -16,9 +16,18 @@ Subcommands
     LOCALLY_DIVERGED the local body changed; the parent did not
     FORKED           both changed independently
 
+The state covers the SKILL.md contract and every file under references/. A
+contract's operative detail often lives in a reference -- mira-github's failure
+fixtures, repo-audit's finding schema -- so comparing only SKILL.md would report
+clean while a contract diverged substantively. The per-skill state is the
+combination: any reference that diverged makes the skill diverged.
+
 Divergence is not failure. Every LOCALLY_DIVERGED result must be classified in
 lineage/advancement-ledger.json as intentional-scope, candidate-advance, or
 unreviewed, so no divergence sits unexamined.
+
+UNVERIFIED means a reference exists with no recorded digest to compare against.
+It is not divergence, but it is a blind spot, so --strict rejects it too.
 """
 
 from __future__ import annotations
@@ -101,6 +110,69 @@ def render_with_provenance(source_text: str, provenance: dict[str, str]) -> str:
     return "---\n" + "\n".join(kept + added) + "\n---\n" + body
 
 
+def reference_files(skill_dir: Path) -> list[Path]:
+    references = skill_dir / "references"
+    if not references.is_dir():
+        return []
+    return sorted(path for path in references.glob("*") if path.is_file())
+
+
+def reference_digests(skill_dir: Path) -> dict[str, str]:
+    return {path.name: digest(normalized_text(path)) for path in reference_files(skill_dir)}
+
+
+def recorded_reference_digests(recorded: dict) -> tuple[dict[str, str], bool]:
+    """Return (name -> digest, digests_available).
+
+    Records written before references were digested carry a bare list of names.
+    That shape is reported as UNVERIFIED rather than silently treated as clean,
+    because an absent baseline is exactly the blind spot this comparison exists
+    to remove.
+    """
+    references = recorded.get("references")
+    if isinstance(references, dict):
+        return references, True
+    if isinstance(references, list):
+        return {name: "" for name in references}, False
+    return {}, True
+
+
+def compare_digests(expected: str, source: str, local: str) -> str:
+    upstream_same = source == expected
+    local_same = local == expected
+    if upstream_same and local_same:
+        return "UNCHANGED"
+    if not upstream_same and local_same:
+        return "UPSTREAM_MOVED"
+    if upstream_same and not local_same:
+        return "LOCALLY_DIVERGED"
+    return "FORKED"
+
+
+DIVERGENT_STATES = {"LOCALLY_DIVERGED", "FORKED"}
+STRUCTURAL_STATES = ("MISSING_LOCAL", "UPSTREAM_REMOVED", "UPSTREAM_ADDED", "UNVERIFIED")
+
+
+def combine_states(states: list[str]) -> str:
+    """Roll component states up into one summary state for the skill.
+
+    A skill is only UNCHANGED when every part of it is. Structural problems
+    outrank content divergence in the summary because they describe a set that
+    no longer lines up rather than bytes that moved. The summary is for a
+    reader; --strict evaluates the component states directly, so nothing hides
+    behind the label chosen here.
+    """
+    distinct = {state for state in states if state != "UNCHANGED"}
+    if not distinct:
+        return "UNCHANGED"
+    for state in STRUCTURAL_STATES:
+        if state in distinct:
+            return state
+    if "FORKED" in distinct or {"UPSTREAM_MOVED", "LOCALLY_DIVERGED"} <= distinct:
+        return "FORKED"
+    return distinct.pop()
+
+
 def load_manifest() -> dict:
     if not MANIFEST_PATH.exists():
         raise SystemExit(f"missing {MANIFEST_PATH.name}; nothing is declared vendored")
@@ -144,13 +216,36 @@ def command_sync(arguments: argparse.Namespace) -> int:
         if note:
             provenance["vendor_divergence_note"] = json.dumps(note, ensure_ascii=False)
 
+        wants_references = declared.get("references", True)
+        upstream_references = reference_digests(source_dir) if wants_references else {}
+        previous = manifest.get("records", {}).get(name, {})
+
         if divergence != "none" and target_skill.exists() and not arguments.overwrite:
             # A skill carrying intended local divergence must not be silently
             # overwritten by an upstream refresh. Refreshing it is a deliberate
             # act that discards the divergence, so it requires --overwrite.
+            #
+            # Recording still happens. An earlier version replaced the record
+            # with a bare stub carrying the *current* parent digest, which
+            # destroyed the vendoring baseline: the next check compared the
+            # parent against itself and reported the diverged skill UNCHANGED.
+            # Skipping the file write must not mean forgetting what was borrowed.
             records[name] = {
-                "skipped": "declared divergent and already present; use --overwrite to refresh",
-                "vendored_digest": source_digest,
+                "vendored_digest": previous.get("vendored_digest", source_digest),
+                "vendored_at": previous.get("vendored_at", today),
+                "divergence": divergence,
+                # A legacy bare-name list carries no baseline, so upgrade it to
+                # the parent's current digests. Sound only because the contract
+                # is diverged locally rather than upstream: the parent's bytes
+                # are still the bytes this was vendored from. A skill whose
+                # parent had also moved would need re-vendoring, not a rewrite.
+                "references": (
+                    previous["references"]
+                    if isinstance(previous.get("references"), dict)
+                    else upstream_references
+                ),
+                "refreshed": False,
+                "skip_reason": "declared divergent and already present; use --overwrite to refresh",
             }
             continue
 
@@ -160,24 +255,20 @@ def command_sync(arguments: argparse.Namespace) -> int:
             newline="\n",
         )
 
-        reference_names: list[str] = []
-        source_references = source_dir / "references"
-        if source_references.is_dir() and declared.get("references", True):
+        if upstream_references:
             target_references = target_dir / "references"
             target_references.mkdir(exist_ok=True)
-            for reference in sorted(source_references.glob("*")):
-                if reference.is_file():
-                    text = normalized_text(reference)
-                    (target_references / reference.name).write_text(
-                        text, encoding="utf-8", newline="\n"
-                    )
-                    reference_names.append(reference.name)
+            for reference in reference_files(source_dir):
+                (target_references / reference.name).write_text(
+                    normalized_text(reference), encoding="utf-8", newline="\n"
+                )
 
         records[name] = {
             "vendored_digest": source_digest,
             "vendored_at": today,
             "divergence": divergence,
-            "references": reference_names,
+            "references": upstream_references,
+            "refreshed": True,
         }
 
     manifest["last_sync"] = today
@@ -203,46 +294,78 @@ def command_check(arguments: argparse.Namespace) -> int:
         source_skill = parent / "docs" / "skill-drafts" / name / "SKILL.md"
         local_skill = REPO_ROOT / "docs" / "skill-drafts" / name / "SKILL.md"
 
+        reference_states: dict[str, str] = {}
+
         if not local_skill.exists():
-            state = "MISSING_LOCAL"
+            contract_state = "MISSING_LOCAL"
         elif not source_skill.exists():
-            state = "UPSTREAM_REMOVED"
+            contract_state = "UPSTREAM_REMOVED"
         else:
-            source_digest = digest(normalized_text(source_skill))
-            local_digest = digest(upstream_equivalent(normalized_text(local_skill)))
-            upstream_same = source_digest == expected
-            local_same = local_digest == expected
-            if upstream_same and local_same:
-                state = "UNCHANGED"
-            elif not upstream_same and local_same:
-                state = "UPSTREAM_MOVED"
-            elif upstream_same and not local_same:
-                state = "LOCALLY_DIVERGED"
-            else:
-                state = "FORKED"
+            contract_state = compare_digests(
+                expected,
+                digest(normalized_text(source_skill)),
+                digest(upstream_equivalent(normalized_text(local_skill))),
+            )
+            recorded_references, have_digests = recorded_reference_digests(recorded)
+            upstream_references = reference_digests(parent / "docs" / "skill-drafts" / name)
+            local_references = reference_digests(REPO_ROOT / "docs" / "skill-drafts" / name)
+
+            for reference in sorted(set(recorded_references) | set(upstream_references) | set(local_references)):
+                if reference not in recorded_references:
+                    reference_states[reference] = "UPSTREAM_ADDED"
+                elif not have_digests:
+                    reference_states[reference] = "UNVERIFIED"
+                elif reference not in local_references:
+                    reference_states[reference] = "MISSING_LOCAL"
+                elif reference not in upstream_references:
+                    reference_states[reference] = "UPSTREAM_REMOVED"
+                else:
+                    reference_states[reference] = compare_digests(
+                        recorded_references[reference],
+                        upstream_references[reference],
+                        local_references[reference],
+                    )
+
+        component_states = [contract_state, *reference_states.values()]
+        state = combine_states(component_states)
 
         results[name] = {
             "state": state,
+            "contract_state": contract_state,
+            "reference_states": reference_states,
             "declared_divergence": declared.get("divergence", "none"),
         }
         counts[state] = counts.get(state, 0) + 1
 
+    # Evaluated over component states rather than the rolled-up summary, so a
+    # divergence cannot hide behind a structural label that outranks it.
     unclassified = [
         name
         for name, result in results.items()
-        if result["state"] in {"LOCALLY_DIVERGED", "FORKED"}
-        and result["declared_divergence"] == "none"
+        if result["declared_divergence"] == "none"
+        and DIVERGENT_STATES & ({result["contract_state"], *result["reference_states"].values()})
     ]
+    structural = {
+        name: [
+            component
+            for component, component_state in result["reference_states"].items()
+            if component_state in STRUCTURAL_STATES
+        ]
+        for name, result in results.items()
+    }
+    structural = {name: components for name, components in structural.items() if components}
 
     report = {
         "counts": counts,
         "results": results,
         "unclassified_divergence": unclassified,
+        "structural_reference_problems": structural,
     }
     print(json.dumps(report, indent=2, ensure_ascii=False))
 
-    if arguments.strict and unclassified:
-        # Divergence itself is permitted. Divergence nobody has classified is not.
+    if arguments.strict and (unclassified or structural):
+        # Divergence itself is permitted. Divergence nobody has classified is
+        # not, and neither is a reference with no baseline to compare against.
         return 1
     return 0
 

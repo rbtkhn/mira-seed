@@ -103,12 +103,14 @@
     "skill-audit": {
       "group": "meta",
       "reason": "Pairs with the cold read; assesses its own borrowed contracts.",
-      "divergence": "none"
+      "divergence": "intentional-scope",
+      "divergence_note": "Harness neutrality, wording only. The upstream description audits 'repository-local Codex skills' and the rubric warns against trigger details 'Codex cannot see'. The underlying mechanic is true in both harnesses -- each surfaces only the description until a skill is read -- so this changes no behavior. It is corrected because a contract that names one harness while running in two teaches the wrong thing to whoever reads it next."
     },
     "mira-github": {
       "group": "meta",
       "reason": "Ordinary commit and push traffic control is a dependency of having writing forms at all, independent of whether publication shorthand is ever granted.",
-      "divergence": "none"
+      "divergence": "intentional-scope",
+      "divergence_note": "Harness neutrality, two behavioral corrections and one inherited subject-matter leak. First, the publication branch namespace moves from 'codex/' to 'agent/' in all four places it appears, including the two where it is used to DETECT a publication branch rather than create one -- under the upstream text a session in another harness would either mislabel its own provenance or fail to recognize its own branch. Harness provenance is redirected to the commit trailer and push receipt, which can record it per commit; a branch name cannot, since one branch may receive commits from more than one session type. Second, the Windows credential-split diagnosis no longer instructs matching a known sandbox account name; it instructs comparing whoami between a normal and an approved command, with the Codex account retained as one observed example. The upstream form would have a session in another harness rule out a split that was present. Third, the branch-name examples cited parent domains (forecast-lebanon-hormuz, archive-aug14-intake), which presume geopolitics as this repository's subject matter -- something AGENTS.md states is not inherited and belongs to germination."
     }
   },
   "excluded": {
@@ -142,131 +144,153 @@
       "vendored_digest": "bf5e2c4777efd6020110ab4331a2ab40c80f3f41ebbb1cf8ecff1bde01f03d6a",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "elicitation": {
       "vendored_digest": "6da6410192f1162b9063818d2da84c0aa2ce7f1705e733da519ce63181776886",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "geo-strategy": {
       "vendored_digest": "162859b863e33d4cf59b4fa95a7ab97b82b4ef5a2151318c7cde662dd14b0492",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "intent-recovery": {
       "vendored_digest": "b51bd6e3986dffa9d465325ee1f07e385ccac13cb63978977f660bac46b228a9",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "learn-from-choices": {
       "vendored_digest": "1d52d0b152f4abadf68c760f56c7d96156e7c487424a2a02f1e6cedd2573fbd5",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "choice-retention.md",
-        "decision-fixtures.json",
-        "outcome-review.md"
-      ]
+      "references": {
+        "choice-retention.md": "447167f9553fd93d1a06c05816612eb45675108b70a094c39c7d6bb16ad0e657",
+        "decision-fixtures.json": "b4f3cc47be628f1bb8b498c5ef0ffa2fb425f59401ca0f2ec620d77e57087095",
+        "outcome-review.md": "5f8088852246b01105a83e8ce6fb11b2f6b6b26110d8c60e0c01d97640dd3c78"
+      },
+      "refreshed": true
     },
     "library-reasoning": {
       "vendored_digest": "87c9a91c98f296243ad4862895100827feaa82b007346da9fc4a8b2019b638a3",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "mechanism-lens": {
       "vendored_digest": "fec523e061a8ea4b76509fca8296b048c324fd7ee8ddb927ae8d2bde92b9bfea",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "mira-essays": {
       "vendored_digest": "b99ba2d7337268e590ab9590ce57251859b64029e62f86e23a633223f61c2492",
       "vendored_at": "2026-09-03",
       "divergence": "intentional-scope",
-      "references": []
+      "references": {},
+      "refreshed": false,
+      "skip_reason": "declared divergent and already present; use --overwrite to refresh"
     },
     "mira-github": {
       "vendored_digest": "8bfdb412b942df5c168a941189e185d4a180d39fb374cc0bcd64a6de15401084",
       "vendored_at": "2026-09-03",
-      "divergence": "none",
-      "references": [
-        "validation-fixtures.md"
-      ]
+      "divergence": "intentional-scope",
+      "references": {
+        "validation-fixtures.md": "04dc5e77d94e2dd963572e314aff99a8d4d82d9795a0ce8a3dba304e58d05a29"
+      },
+      "refreshed": false,
+      "skip_reason": "declared divergent and already present; use --overwrite to refresh"
     },
     "mira-journal": {
       "vendored_digest": "0df08cdcd42731a918117646841fb3d42c461bb4e7a29427cb613b0d7375ff32",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "composition-method.md"
-      ]
+      "references": {
+        "composition-method.md": "0ae18ea6add58b3fa1493126dc4e65fd61053283e8a3d6013a3d9525a8fc5d9e"
+      },
+      "refreshed": true
     },
     "mira-memory": {
       "vendored_digest": "65d3c61746ca4d481c81855683f419badfec608d0800fbc779dc97d97af4039b",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "carrier-map.md"
-      ]
+      "references": {
+        "carrier-map.md": "351b9af236ff21f549ad273569d0621e51fb1286c12ae2e47e0cfd1c3df98304"
+      },
+      "refreshed": true
     },
     "mira-notes": {
       "vendored_digest": "aebf36154316cd09436a9b6d2e659e6a62c5d8510678c1b8af274c7b45726901",
       "vendored_at": "2026-09-03",
       "divergence": "intentional-scope",
-      "references": []
+      "references": {},
+      "refreshed": false,
+      "skip_reason": "declared divergent and already present; use --overwrite to refresh"
     },
     "mira-voice": {
       "vendored_digest": "3bd59af9cd0db550086aeb9227247cf9f8a7973ee61d774a5d4cbeedfbe2a0a1",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "validation-fixtures.md"
-      ]
+      "references": {
+        "validation-fixtures.md": "164f1a2775e722f88717cc9f6659e16a6f68b452bab5eb534b62ecc73d18ceae"
+      },
+      "refreshed": true
     },
     "mira-work": {
       "vendored_digest": "18064eccc18baaa3d0febae238a97c2a51661a243aa69742733389c0c5ad14b7",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "execution-profile.md",
-        "validation-fixtures.json"
-      ]
+      "references": {
+        "execution-profile.md": "7d52f15f56dc7d80340db8449eff41d33b38b4cc1436f09de1f9989c5c88a2b0",
+        "validation-fixtures.json": "de97312e51629c36f54d7e700d18b281993e73441cc6502e80a505d46f1a20bd"
+      },
+      "refreshed": true
     },
     "recursive-learn": {
       "vendored_digest": "d19e8473fa0345643639573c60a4dd1f82a19b43fd8ad20d72724b67cbcf8959",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "repo-audit": {
       "vendored_digest": "e62cff9d12800e0de1676109bc40938d60145645c013541b2286afe4524841fa",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": [
-        "audit-routing.md",
-        "finding-schema.md",
-        "validation-fixtures.md"
-      ]
+      "references": {
+        "audit-routing.md": "079a6c0f6497f21622545e2dd36a044cd41f0bb13e28277ccb1bf2226f301e68",
+        "finding-schema.md": "b369f442b7a9228f31bed66970cfb33f20eb34fb9f6dad7c33597ef789541e1c",
+        "validation-fixtures.md": "da8d8e2d0d34678f73117eff6f74a61cd9ccdba3bfec253ae681bba0f10f44bb"
+      },
+      "refreshed": true
     },
     "research-brief": {
       "vendored_digest": "b5300a4ad6925279db0343afe0a85e3da8c5f63fb39e01d3caeb837c89f76728",
       "vendored_at": "2026-09-03",
       "divergence": "none",
-      "references": []
+      "references": {},
+      "refreshed": true
     },
     "skill-audit": {
       "vendored_digest": "93dc66f6fe1d64df2a8a6c8829ccf1aae1d1a0c733a2686bd449d5e13217d304",
       "vendored_at": "2026-09-03",
-      "divergence": "none",
-      "references": [
-        "agent-operating-system-checklist.md",
-        "audit-rubric.md"
-      ]
+      "divergence": "intentional-scope",
+      "references": {
+        "agent-operating-system-checklist.md": "05f1f872253cc2b7aeb131579df08d1db28190b7e58016b057b90b2575bd322e",
+        "audit-rubric.md": "3e62b74fc9b957c667ffeadd7d2a59d61a1151bef056fd7bc8e5033daab3afef"
+      },
+      "refreshed": false,
+      "skip_reason": "declared divergent and already present; use --overwrite to refresh"
     }
   }
 }

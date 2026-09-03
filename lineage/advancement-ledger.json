@@ -133,9 +133,45 @@
           "skill": "mira-essays",
           "classification": "intentional-scope",
           "summary": "essay this publication shorthand removed on the same grounds."
+        },
+        {
+          "skill": "mira-github",
+          "classification": "intentional-scope",
+          "summary": "Harness neutrality. Publication branch namespace moved from codex/ to agent/ in all four occurrences, including the two that use the prefix to detect a publication branch rather than create one. Credential-split diagnosis rewritten to compare whoami between a normal and an approved command instead of matching a literal sandbox account name. Branch examples replaced because the upstream ones cited parent domains and so presumed a subject matter this repository has not chosen. Contract scope corrected from Mira Core to this repository.",
+          "not_an_advance": "The upstream text is accurate for Mira Core, which runs in one harness. This adapts a correct contract to a different circumstance rather than fixing a parent defect, which is why it is intentional-scope and not a candidate advance. Recorded in the parent as LIN-0005, a latent coupling for Mira Core to repair if it ever targets a second harness."
+        },
+        {
+          "skill": "skill-audit",
+          "classification": "intentional-scope",
+          "summary": "Harness neutrality, wording only. Description and rubric no longer name Codex as the audited object or as the reader that cannot see body-only triggers. The mechanic they describe holds in both harnesses, so no behavior changes."
         }
       ],
-      "expected_next": "mira-voice. Vendored verbatim it produces something that sounds like Mira, which defeats the purpose of a separate repository. Early divergence there is intended and should be classified intentional-scope when it happens."
+      "expected_next": "mira-voice. Vendored verbatim it produces something that sounds like Mira, which defeats the purpose of a separate repository. Early divergence there is intended and should be classified intentional-scope when it happens.",
+      "defects_found_and_fixed_in_this_mechanism": {
+        "ownership": "This repository's own tooling, not inherited. vendor.py was written here, so these were defects to fix rather than parent repairs to route upstream, and fixing them earns no advancement credit. Recorded because a mechanism that was trusted while broken should not quietly become a mechanism that works.",
+        "status": "Both fixed. Covered by tests/test_vendor.py, 14 tests.",
+        "entries": [
+          {
+            "id": "VND-0001",
+            "surface": "tools/vendor.py command_check",
+            "defect": "check compared only SKILL.md against the parent. Reference files under references/ were copied by sync and recorded by name, never digested and never compared, so drift in a reference was invisible and --strict could not catch it.",
+            "how_found": "Not by audit. The harness-neutrality pass edited two reference files -- mira-github/references/validation-fixtures.md and skill-audit/references/audit-rubric.md -- and check reported both skills diverged solely on their SKILL.md changes. Had the edits touched only references, check would have said UNCHANGED.",
+            "consequence": "The four-state model claimed more coverage than it delivered. A contract whose operative detail lives in a reference -- mira-github and repo-audit both qualify -- could diverge substantively while reporting clean.",
+            "repair": "sync digests each reference into records[name].references as name-to-digest pairs. check compares them and folds the results into the skill's state. Two states were added: UPSTREAM_ADDED for a parent reference never vendored, and UNVERIFIED for a reference with no recorded baseline. --strict rejects both, because an absent baseline must never read as agreement.",
+            "verified": "A previously clean skill flips to LOCALLY_DIVERGED on a reference-only edit and --strict exits 1; restoring the file returns it to 0."
+          },
+          {
+            "id": "VND-0002",
+            "surface": "tools/vendor.py command_sync, the declared-divergent skip path",
+            "defect": "Skipping the file write for a declared-divergent skill replaced its record with a stub carrying the CURRENT parent digest, discarding the vendoring baseline along with vendored_at, divergence, and references.",
+            "consequence": "Strictly worse than the gap above, and silent. After one sync, check compared the parent against itself and reported the diverged skill UNCHANGED. A deliberate divergence would have disappeared from the ledger's view at the moment someone ran a routine refresh, and nothing would have said so.",
+            "how_found": "Reading command_sync while fixing VND-0001, before running it. Had it been run first, the four classified divergences would have been erased.",
+            "repair": "The skip path preserves the prior record and marks refreshed false with a skip reason. A legacy bare-name reference list is upgraded to digests from the parent's current bytes, which is sound only because the contract diverged locally rather than upstream; a skill whose parent had also moved needs re-vendoring, not a rewrite.",
+            "verified": "test_sync_skip_preserves_the_vendoring_baseline asserts the baseline survives a sync and that the skill still reports LOCALLY_DIVERGED afterward."
+          }
+        ],
+        "lesson": "Both defects were in the machinery that reports honesty rather than in any contract, and neither would have been found by reading the four-state model, which is coherent and states its intent clearly. They were found by using the tool and then reading the path not taken. That is an argument for the cold read applying to local tooling and not only to borrowed contracts."
+      }
     }
   },
   "cold_read": {

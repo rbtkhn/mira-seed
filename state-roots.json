@@ -82,7 +82,7 @@
   "implementation_status": {
     "declared": true,
     "enforced": false,
-    "note": "The shared toolchain does not yet read this file. The state-root-config, mixed-override-fix, archive-shelf-split, and admission-guard changes that make it load-bearing are deferred until the parent's working tree is clean enough to validate them against. Until then, treat every access mode here as an intention that nothing checks.",
-    "risk_if_forgotten": "A hydration run against this checkout would resolve paths from environment variables rather than from this file, and the read-only mode on shared evidence would not be enforced. Do not hydrate here until the guard exists."
+    "note": "The shared toolchain does not yet read this file. Five deferred changes make it load-bearing: repo-root-threading, state-root-config, mixed-override-fix, archive-shelf-split, and admission-guard. They are deferred until the parent's working tree is clean enough to validate them against, and are specified in the parent's lineage/shared-toolchain-spec.md. Until then, treat every access mode here as an intention that nothing checks.",
+    "risk_if_forgotten": "Worse than an unenforced access mode. Until repo-root-threading lands, the parent's archive hydrate resolves its targets through a module-level REPO_ROOT bound to the parent's own checkout, so a hydration run started from this repository writes into Mira Core's tree rather than this one. The read-only mode declared on shared evidence is also unenforced. Do not hydrate here until both changes exist."
   }
 }
