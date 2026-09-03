@@ -1,0 +1,22 @@
+# Digest-bound sources must hash identically across platforms.
+#
+# This repository's provenance rests on sha256 digests: vendored skill contracts
+# carry the digest of the upstream bytes they came from, and the germination
+# invitation is verified against a recorded digest rather than an assertion.
+#
+# Git's autocrlf conversion would rewrite line endings in the working tree,
+# which changes those digests without changing a word of content. Pinning LF
+# here keeps a digest a fact about content rather than about which machine
+# happened to check the file out.
+#
+# The tooling also normalizes newlines before hashing, so an unpinned or
+# hand-copied file still verifies. The redundancy is deliberate: the pin keeps
+# digests stable, and the normalization keeps an honest transmission from being
+# mistaken for tampering.
+
+* text=auto eol=lf
+
+docs/skill-drafts/** text eol=lf
+lineage/invitation-received.md text eol=lf
+vendor-manifest.json text eol=lf
+tools/*.py text eol=lf
